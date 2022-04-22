@@ -4,5 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
-
+    <include file="classpath:config/liquibase/changelog/001_create_users_table.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/002_create_roles_table.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/003_create_role_user_pivot_table.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
