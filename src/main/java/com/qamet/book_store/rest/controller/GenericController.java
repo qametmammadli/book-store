@@ -14,7 +14,7 @@ import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
-public class GenericController<DTO extends AbstractDTO> {
+public abstract class GenericController<DTO extends AbstractDTO> {
 
     private final GenericService<DTO> genericService;
 
