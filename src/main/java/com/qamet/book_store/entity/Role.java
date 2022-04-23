@@ -1,5 +1,6 @@
 package com.qamet.book_store.entity;
 
+import com.qamet.book_store.entity.enumeration.RoleName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,11 +13,13 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Role extends AbstractEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private RoleName name;
 
     @Override
     public boolean equals(Object o) {
