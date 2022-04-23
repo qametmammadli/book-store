@@ -70,7 +70,9 @@ public class TokenProvider {
 
         User principal = new User(user.getUsername(), "", grantedAuthorities);
 
-        return new UsernamePasswordAuthenticationToken(principal, token, principal.getAuthorities());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(principal, token, principal.getAuthorities());
+        authenticationToken.setDetails(user.getId());
+        return authenticationToken;
     }
 
     public boolean validateToken(String authToken) {
