@@ -65,10 +65,8 @@ public class TokenProvider {
         List<GrantedAuthority> grantedAuthorities = user
                 .getRoles()
                 .stream()
-                .map(authority -> new SimpleGrantedAuthority("ROLE_".concat(authority.getName())))
+                .map(authority -> new SimpleGrantedAuthority("ROLE_".concat(authority.getName().name())))
                 .collect(Collectors.toList());
-
-        grantedAuthorities.forEach(System.out::println);
 
         User principal = new User(user.getUsername(), "", grantedAuthorities);
 

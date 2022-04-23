@@ -23,12 +23,12 @@ public class DataSeeder implements ApplicationRunner {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
 
         if (roleRepository.count() < 1) {
-            Role userRole = new Role(null, RoleName.USER.name());
-            Role adminRole = new Role(null, RoleName.ADMIN.name());
-            Role publisherRole = new Role(null, RoleName.PUBLISHER.name());
+            Role userRole = new Role(null, RoleName.USER);
+            Role adminRole = new Role(null, RoleName.ADMIN);
+            Role publisherRole = new Role(null, RoleName.PUBLISHER);
             roleRepository.saveAll(Arrays.asList(adminRole, userRole, publisherRole));
         }
 

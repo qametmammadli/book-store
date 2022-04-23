@@ -30,9 +30,4 @@ public class AuthController {
         jwtResponseDTO.setAccessToken(token);
         return ResponseEntity.ok(jwtResponseDTO);
     }
-
-    @GetMapping
-    public ResponseEntity<?> testRole() {
-        return ResponseEntity.ok(null);
-    }
 }
