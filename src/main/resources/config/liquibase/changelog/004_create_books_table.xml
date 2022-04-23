@@ -21,17 +21,21 @@
                 <constraints nullable="false"/>
             </column>
 
+            <column name="price" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+
         </createTable>
     </changeSet>
 
     <changeSet id="004_add_publisher_foreign_key_constraint_to_books_table" author="com.qamet.book_store">
 
-    <addForeignKeyConstraint baseTableName="books"
-                             baseColumnNames="publisher_id"
-                             constraintName="fk_books_publisher_id"
-                             referencedTableName="users"
-                             referencedColumnNames="id"
-                             onDelete="RESTRICT"/>
+        <addForeignKeyConstraint baseTableName="books"
+                                 baseColumnNames="publisher_id"
+                                 constraintName="fk_books_publisher_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 onDelete="RESTRICT"/>
 
     </changeSet>
 

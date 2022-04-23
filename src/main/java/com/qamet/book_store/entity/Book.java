@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,6 +21,8 @@ public class Book extends AbstractEntity {
 
     private String description;
 
+    private BigDecimal price;
+
     @Column(name = "publisher_id")
     private Integer publisherId;
 
@@ -28,7 +31,7 @@ public class Book extends AbstractEntity {
     @ToString.Exclude
     private User publisher;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "book_author",
             joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id", nullable = false, updatable = false),
