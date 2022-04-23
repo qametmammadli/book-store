@@ -21,7 +21,7 @@ public class Book extends AbstractEntity {
     private String description;
 
     @Column(name = "publisher_id")
-    private Long publisherId;
+    private Integer publisherId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id", insertable = false, updatable = false)
