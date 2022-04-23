@@ -1,18 +1,18 @@
 package com.qamet.book_store.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.qamet.book_store.rest.dto.AbstractDTO;
 
+import java.util.List;
 import java.util.Optional;
 
-public interface GenericService<DTO, ENTITY> {
+public interface GenericService<DTO extends AbstractDTO> {
     void save(DTO dto);
 
-    Page<DTO> findAll(Pageable pageable);
+    List<DTO> findAll();
 
-    DTO findById(Long id);
+    DTO findById(Integer id);
 
-    Optional<DTO> update(Long id, DTO dto);
+    Optional<DTO> update(Integer id, DTO dto);
 
-    void delete(Long id);
+    void delete(Integer id);
 }
