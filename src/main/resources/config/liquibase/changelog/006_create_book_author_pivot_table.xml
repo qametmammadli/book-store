@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="006_create_book_author_pivot_table" author="com.qamet.book_store">
+        <createTable tableName="book_author">
+
+            <column name="book_id" type="int(10)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="author_id" type="int(10)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="006_add_foreign_key_constraints_to_book_author_pivot_table" author="com.qamet.book_store">
+
+        <addForeignKeyConstraint baseTableName="book_author"
+                                 baseColumnNames="book_id"
+                                 constraintName="fk_book_author_book_id"
+                                 referencedTableName="books"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint baseTableName="book_author"
+                                 baseColumnNames="author_id"
+                                 constraintName="fk_book_author_author_id"
+                                 referencedTableName="authors"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+
+
+    </changeSet>
+</databaseChangeLog>
