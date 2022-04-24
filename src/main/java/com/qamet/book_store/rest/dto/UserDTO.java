@@ -39,6 +39,7 @@ public class UserDTO extends AbstractDTO {
     private String email;
 
     @NotEmpty
+    @Size(min = 6, max = 100)
     private String password;
 
     public UserDTO(User user) {
