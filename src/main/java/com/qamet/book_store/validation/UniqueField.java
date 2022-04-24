@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueField {
-    String message() default "This value is already used";
+    String message() default "This value is already exist";
 
     Class<?>[] groups() default {};
 
