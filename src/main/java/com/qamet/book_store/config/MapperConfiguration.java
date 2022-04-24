@@ -11,21 +11,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.zalando.problem.jackson.ProblemModule;
 
-import java.util.TimeZone;
-
 @Configuration
-public class JacksonConfiguration {
-
-    /*
-     * Module for serialization/deserialization of RFC7807 Problem.
-     */
+public class MapperConfiguration {
     @Bean
     public ProblemModule problemModule() {
         return new ProblemModule();
     }
 
     /*
-     * Module for trimming leading/trailing/extra whitespaces from all strings.
+     * trimming extra whitespaces from all strings.
      */
     @Bean
     public StringInitializerModule stringTrimModule() {
@@ -34,11 +28,7 @@ public class JacksonConfiguration {
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
-        return jacksonObjectMapperBuilder -> {
-            jacksonObjectMapperBuilder.propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
-            TimeZone timeZone = TimeZone.getTimeZone("Asia/Baku");
-            jacksonObjectMapperBuilder.timeZone(timeZone);
-        };
+        return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder.propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
     }
 
     @Bean
