@@ -1,6 +1,8 @@
 package com.qamet.book_store.rest.errors;
 
 import com.qamet.book_store.util.StringUtil;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,8 +80,8 @@ public class ApiExceptionHandler implements ProblemHandling, SecurityAdviceTrait
         return violationsMap;
     }
 
-    @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<Problem> handleNoSuchElementException(NoSuchElementException ex, NativeWebRequest request) {
+    @ExceptionHandler({NoSuchElementException.class, EmptyResultDataAccessException.class})
+    public ResponseEntity<Problem> handleNotFoundExceptions(RuntimeException ex, NativeWebRequest request) {
         Problem problem = Problem.builder()
                 .withTitle("Not Found")
                 .withStatus(Status.NOT_FOUND)
@@ -88,4 +90,27 @@ public class ApiExceptionHandler implements ProblemHandling, SecurityAdviceTrait
 
         return create(ex, problem, request);
     }
+
+    @ExceptionHandler(ForeignKeyException.class)
+    public ResponseEntity<Problem> handleForeignKeyException(ForeignKeyException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+                .withTitle("Can't be deleted")
+                .withStatus(Status.CONFLICT)
+                .with("message", "Data with this id " + ex.getId() + " is used in other table. Please, firstly delete those data")
+                .build();
+
+        return create(ex, problem, request);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Problem> handleForeignKeyException(DataIntegrityViolationException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+                .withTitle("Error")
+                .withStatus(Status.BAD_REQUEST)
+                .with("message", "Something went wrong with data")
+                .build();
+
+        return create(ex, problem, request);
+    }
+
 }
