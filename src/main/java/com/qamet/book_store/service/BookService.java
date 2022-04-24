@@ -4,9 +4,12 @@ import com.qamet.book_store.entity.Author;
 import com.qamet.book_store.entity.Book;
 import com.qamet.book_store.repository.BookRepository;
 import com.qamet.book_store.rest.dto.BookDTO;
+import com.qamet.book_store.rest.dto.BookSpecDTO;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -48,12 +51,25 @@ public class BookService implements GenericService<BookDTO> {
 
     @Override
     public List<BookDTO> findAll() {
-        return mapper.map(bookRepository.findAll(), new TypeToken<List<BookDTO>>() {}.getType());
+        return mapper.map(bookRepository.findAll(), new TypeToken<List<BookDTO>>() {
+        }.getType());
+    }
+
+    public Page<BookDTO> findByFilter(BookSpecDTO bookSpecDTO,
+                                      Pageable pageable) {
+
+        Page<Book> books = bookRepository.findAllBySpec(bookSpecDTO, pageable);
+        return books.map(book -> mapper.map(book, BookDTO.class));
     }
 
     @Override
     public BookDTO findById(Integer id) {
-        return null;
+        return mapper.map(bookRepository.findById(id).orElseThrow(), BookDTO.class);
+    }
+
+    public List<BookDTO> findAllByPublisher(Integer publisherId) {
+        return mapper.map(bookRepository.findByPublisherId(publisherId), new TypeToken<List<BookDTO>>() {
+        }.getType());
     }
 
     @Override

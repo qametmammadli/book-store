@@ -1,14 +1,59 @@
 package com.qamet.book_store.rest.controller;
 
 import com.qamet.book_store.rest.dto.BookDTO;
+import com.qamet.book_store.rest.dto.BookSpecDTO;
 import com.qamet.book_store.service.BookService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/books")
 public class BookController extends GenericController<BookDTO> {
+
+    private final BookService bookService;
+
     public BookController(BookService bookService) {
         super(bookService);
+        this.bookService = bookService;
+    }
+
+    @GetMapping("/by_publisher/{publisherId}")
+    public ResponseEntity<?> findByPublisher(@PathVariable Integer publisherId) {
+        return ResponseEntity.ok(bookService.findAllByPublisher(publisherId));
+    }
+
+    @GetMapping("/published_by_me")
+    public ResponseEntity<?> findByMe() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Integer publisherId = (Integer) authentication.getDetails();
+        return ResponseEntity.ok(bookService.findAllByPublisher(publisherId));
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<?> findByFilter(
+            @RequestParam(defaultValue = "", value = "book_name") String bookName,
+            @RequestParam(defaultValue = "", value = "book_description") String bookDescription,
+            @RequestParam(defaultValue = "", value = "author_name") String authorName,
+            @RequestParam(defaultValue = "", value = "publisher_name") String publisherName,
+            @RequestParam(defaultValue = "0.0", value = "price_from") BigDecimal fromPrice,
+            @RequestParam(required = false, value = "price_to") BigDecimal toPrice,
+            Pageable pageable
+    ) {
+        BookSpecDTO bookSpecDTO = BookSpecDTO.builder()
+                .bookName(bookName.trim())
+                .bookDescription(bookDescription.trim())
+                .authorName(authorName.trim())
+                .publisherName(publisherName.trim())
+                .priceFrom(fromPrice)
+                .priceTo(toPrice == null ? BigDecimal.valueOf(Long.MAX_VALUE) : toPrice)
+                .build();
+
+
+        return ResponseEntity.ok(bookService.findByFilter(bookSpecDTO, pageable));
     }
 }
