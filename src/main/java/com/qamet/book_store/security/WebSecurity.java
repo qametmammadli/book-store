@@ -1,5 +1,6 @@
 package com.qamet.book_store.security;
 
+import com.qamet.book_store.entity.enumeration.RoleName;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -30,6 +31,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/authentication").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/users/{id}/add_publisher_role").hasRole(RoleName.ADMIN.name())
+                .antMatchers(HttpMethod.POST, "/api/books").hasRole(RoleName.PUBLISHER.name())
+                .antMatchers(HttpMethod.GET, "/api/books/published_by_me").hasRole(RoleName.PUBLISHER.name())
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated();
 
