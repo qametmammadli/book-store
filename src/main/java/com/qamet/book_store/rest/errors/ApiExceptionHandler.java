@@ -10,6 +10,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.DefaultProblem;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ProblemBuilder;
+import org.zalando.problem.Status;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
 import org.zalando.problem.violations.ConstraintViolationProblem;
@@ -69,11 +70,22 @@ public class ApiExceptionHandler implements ProblemHandling, SecurityAdviceTrait
         violations.forEach(violation -> {
             String field = StringUtil.toSnakeCase(violation.getField());
             if (violationsMap.containsKey(field)) {
-                 violationsMap.get(field).add(violation.getMessage());
+                violationsMap.get(field).add(violation.getMessage());
             } else {
                 violationsMap.put(field, new ArrayList<>(Collections.singleton(violation.getMessage())));
             }
         });
         return violationsMap;
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<Problem> handleNoSuchElementException(NoSuchElementException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+                .withTitle("Not Found")
+                .withStatus(Status.NOT_FOUND)
+                .with("message", "Such data not found in database")
+                .build();
+
+        return create(ex, problem, request);
     }
 }

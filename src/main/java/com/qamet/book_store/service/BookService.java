@@ -32,6 +32,7 @@ public class BookService implements GenericService<BookDTO> {
         book.setName(dto.getName());
         book.setDescription(dto.getDescription());
         book.setPublisherId(dto.getPublisherId());
+        book.setPrice(dto.getPrice());
         Set<Author> authors = new HashSet<>();
         dto.getAuthorIds().forEach(authorId -> {
             Author author = new Author();
