@@ -45,16 +45,15 @@ public class UserService implements GenericService<UserDTO> {
         return userRepository.findById(id).map(UserDTO::new).orElseThrow();
     }
 
-    @Override
-    public Optional<UserDTO> update(Integer id, UserDTO userDTO) {
-        return Optional.empty();
-    }
-
     @Transactional
     public void addPublisherRole(Integer id) {
         User user = userRepository.findById(id).orElseThrow();
         user.getRoles().add(roleRepository.findByName(RoleName.PUBLISHER));
         userRepository.save(user);
+    }
+
+    public UserDTO findByUsername(String username) {
+        return mapper.map(userRepository.findByUsername(username).orElseThrow(), UserDTO.class);
     }
 
     @Override

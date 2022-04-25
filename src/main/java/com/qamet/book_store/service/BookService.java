@@ -5,11 +5,13 @@ import com.qamet.book_store.entity.Book;
 import com.qamet.book_store.repository.BookRepository;
 import com.qamet.book_store.rest.dto.BookDTO;
 import com.qamet.book_store.rest.dto.BookSpecDTO;
+import com.qamet.book_store.rest.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -26,26 +27,16 @@ import java.util.Set;
 public class BookService implements GenericService<BookDTO> {
 
     private final BookRepository bookRepository;
+    private final UserService userService;
     private final ModelMapper mapper;
 
     @Override
     @Transactional
     public void save(BookDTO dto) {
         Book book = new Book();
-        book.setName(dto.getName());
-        book.setDescription(dto.getDescription());
-        book.setPublisherId(dto.getPublisherId());
-        book.setPrice(dto.getPrice());
-        Set<Author> authors = new HashSet<>();
-        dto.getAuthorIds().forEach(authorId -> {
-            Author author = new Author();
-            author.setId(authorId);
-            authors.add(author);
-        });
-        book.setAuthors(authors);
+        mapToEntity(dto, book);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Integer userId = (Integer) authentication.getDetails();
-        book.setPublisherId(userId);
+        book.setPublisherId(userService.findByUsername(authentication.getName()).getId());
         bookRepository.save(book);
     }
 
@@ -72,9 +63,28 @@ public class BookService implements GenericService<BookDTO> {
         }.getType());
     }
 
-    @Override
-    public Optional<BookDTO> update(Integer id, BookDTO dto) {
-        return Optional.empty();
+    @Transactional
+    public void update(Integer id, BookDTO dto) {
+        Book book = bookRepository.findById(id).orElseThrow();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDTO username = userService.findByUsername(authentication.getName());
+        if (!book.getPublisherId().equals(username.getId())) throw new AccessDeniedException("Publisher can't edit other publishers' books");
+
+        mapToEntity(dto, book);
+        bookRepository.save(book);
+    }
+
+    private void mapToEntity(BookDTO dto, Book book) {
+        book.setName(dto.getName());
+        book.setDescription(dto.getDescription());
+        book.setPrice(dto.getPrice());
+        Set<Author> authors = new HashSet<>();
+        dto.getAuthorIds().forEach(authorId -> {
+            Author author = new Author();
+            author.setId(authorId);
+            authors.add(author);
+        });
+        book.setAuthors(authors);
     }
 
     @Override
