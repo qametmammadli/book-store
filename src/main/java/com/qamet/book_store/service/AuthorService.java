@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -35,14 +34,8 @@ public class AuthorService implements GenericService<AuthorDTO> {
 
     @Override
     public AuthorDTO findById(Integer id) {
-        return null;
+        return mapper.map(authorRepository.findById(id).orElseThrow(), AuthorDTO.class);
     }
-
-    @Override
-    public Optional<AuthorDTO> update(Integer id, AuthorDTO dto) {
-        return Optional.empty();
-    }
-
 
     @Override
     public void delete(Integer id) {
