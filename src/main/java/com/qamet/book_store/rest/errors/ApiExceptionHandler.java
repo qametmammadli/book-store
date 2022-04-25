@@ -117,7 +117,7 @@ public class ApiExceptionHandler implements ProblemHandling, SecurityAdviceTrait
     @ExceptionHandler(JpaObjectRetrievalFailureException.class)
     public ResponseEntity<Problem> handleJpaObjectRetrievalFailureException(JpaObjectRetrievalFailureException ex, NativeWebRequest request) {
         Problem problem = Problem.builder()
-                .withTitle("Can't be deleted")
+                .withTitle("Not found")
                 .withStatus(Status.BAD_REQUEST)
                 .withDetail(Objects.requireNonNull(ex.getMessage()).split(";")[0].replace("com.qamet.book_store.entity.", ""))
                 .build();
