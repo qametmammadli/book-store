@@ -3,12 +3,14 @@ package com.qamet.book_store.rest.controller;
 import com.qamet.book_store.rest.dto.BookDTO;
 import com.qamet.book_store.rest.dto.BookSpecDTO;
 import com.qamet.book_store.service.BookService;
+import com.qamet.book_store.service.UserService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 
 @RestController
@@ -16,10 +18,12 @@ import java.math.BigDecimal;
 public class BookController extends GenericController<BookDTO> {
 
     private final BookService bookService;
+    private final UserService userService;
 
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, UserService userService) {
         super(bookService);
         this.bookService = bookService;
+        this.userService = userService;
     }
 
     @GetMapping("/by_publisher/{publisherId}")
@@ -27,10 +31,16 @@ public class BookController extends GenericController<BookDTO> {
         return ResponseEntity.ok(bookService.findAllByPublisher(publisherId));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Integer id, @Valid @RequestBody BookDTO dto) {
+        bookService.update(id, dto);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/published_by_me")
     public ResponseEntity<?> findByMe() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Integer publisherId = (Integer) authentication.getDetails();
+        Integer publisherId = userService.findByUsername(authentication.getName()).getId();
         return ResponseEntity.ok(bookService.findAllByPublisher(publisherId));
     }
 

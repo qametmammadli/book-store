@@ -1,7 +1,6 @@
 package com.qamet.book_store.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,9 +19,6 @@ public class BookDTO extends AbstractDTO {
     private String name;
 
     private String description;
-
-    @NotNull
-    private Integer publisherId;
 
     @NotEmpty
     private Set<Integer> authorIds;
