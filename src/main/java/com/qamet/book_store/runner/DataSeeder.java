@@ -38,7 +38,7 @@ public class DataSeeder implements ApplicationRunner {
             admin.setLastName("Lastname");
             admin.setUsername("admin");
             admin.setEmail("admin@test.com");
-            admin.setPassword(passwordEncoder.encode("admin"));
+            admin.setPassword(passwordEncoder.encode("admin1"));
             admin.setRoles(new HashSet<>(roleRepository.findAll()));
             userRepository.save(admin);
         }
