@@ -197,6 +197,76 @@ public class BookControllerIntegrationTest {
     }
 
     @Test
+    void shouldReturnBooksByFilter() throws Exception {
+        bookRepository.save(book);
+
+        String filterQueryParams = "size=2" +
+                "&" +
+                "page=0" +
+                "&" +
+                "author_name=AUthor" +
+                "&" +
+                "publisher_name=FiRSt name Last" +
+                "&" +
+                "price_from=1" +
+                "&" +
+                "book_name=tEst" +
+                "&" +
+                "price_to=2" +
+                "&" +
+                "book_description=DESc";
+
+        mockMvc.perform(get(API_URL + "/filter?" + filterQueryParams)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(1)))
+                .andExpect(jsonPath("$.content[0].name", containsString("test")))
+                .andExpect(jsonPath("$.content[0].price", equalTo(1)))
+                .andExpect(jsonPath("$.content[0].description", containsString("description")))
+                .andExpect(jsonPath("$.first", equalTo(Boolean.TRUE)))
+                .andExpect(jsonPath("$.last", equalTo(Boolean.TRUE)))
+                .andExpect(jsonPath("$.number_of_elements", equalTo(1)))
+                .andExpect(jsonPath("$.number", equalTo(0)))
+                .andExpect(jsonPath("$.size", equalTo(2)));
+    }
+
+    @Test
+    void shouldReturnEmptyArray_whenTryToGetBooksByFilter_withInvalidParams() throws Exception {
+        bookRepository.save(book);
+
+        String filterQueryParams = "size=2" +
+                "&" +
+                "page=0" +
+                "&" +
+                "author_name=atre" +
+                "&" +
+                "publisher_name=ff name" +
+                "&" +
+                "price_from=1" +
+                "&" +
+                "book_name=invalid test" +
+                "&" +
+                "price_to=2" +
+                "&" +
+                "book_description=invalid DESc";
+
+        mockMvc.perform(get(API_URL + "/filter?" + filterQueryParams)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(0)))
+                .andExpect(jsonPath("$.first", equalTo(Boolean.TRUE)))
+                .andExpect(jsonPath("$.last", equalTo(Boolean.TRUE)))
+                .andExpect(jsonPath("$.empty", equalTo(Boolean.TRUE)))
+                .andExpect(jsonPath("$.number_of_elements", equalTo(0)))
+                .andExpect(jsonPath("$.number", equalTo(0)))
+                .andExpect(jsonPath("$.size", equalTo(2)));
+    }
+
+    @Test
     void shouldReturn404_whenTryToDeleteBook_notExist() throws Exception {
         mockMvc.perform(delete(API_URL + "/" + 0)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -243,8 +313,8 @@ public class BookControllerIntegrationTest {
                 .content(JsonUtil.convertObjectToJson(bookDTO))
         )
                 .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.title",equalTo("Forbidden")))
-                .andExpect(jsonPath("$.detail",equalTo("Publisher can't edit other publishers' books")));
+                .andExpect(jsonPath("$.title", equalTo("Forbidden")))
+                .andExpect(jsonPath("$.detail", equalTo("Publisher can't edit other publishers' books")));
     }
 
 }
