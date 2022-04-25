@@ -6,6 +6,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -29,6 +31,16 @@ public class ApiExceptionHandler implements ProblemHandling, SecurityAdviceTrait
     public static final String ERR_VALIDATION = "validation";
 
     @Override
+    public ResponseEntity<Problem> handleMessageNotReadableException(HttpMessageNotReadableException exception, NativeWebRequest request) {
+        ProblemBuilder builder = Problem.builder();
+        ProblemBuilder bodyNotReadable = builder
+                .withTitle("Request Body Not Readable");
+        return new ResponseEntity<>(bodyNotReadable.build(), exception.getHttpInputMessage().getHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+
+
+    @Override
     public ResponseEntity<Problem> process(@Nullable ResponseEntity<Problem> entity, @NotNull NativeWebRequest request) {
         if (entity == null) {
             return null;
@@ -44,7 +56,7 @@ public class ApiExceptionHandler implements ProblemHandling, SecurityAdviceTrait
         if (problem instanceof ConstraintViolationProblem) {
             builder
                     .withTitle(ERR_VALIDATION)
-                    .with(VIOLATIONS_KEY, this.transformViolations(((ConstraintViolationProblem) problem).getViolations()));
+                    .with(VIOLATIONS_KEY, mapViolations(((ConstraintViolationProblem) problem).getViolations()));
 
             return new ResponseEntity<>(builder.build(), entity.getHeaders(), HttpStatus.UNPROCESSABLE_ENTITY);
         } else {
@@ -66,7 +78,7 @@ public class ApiExceptionHandler implements ProblemHandling, SecurityAdviceTrait
         return create(ex, request, new HttpHeaders());
     }
 
-    private Map<String, List<String>> transformViolations(List<Violation> violations) {
+    private Map<String, List<String>> mapViolations(List<Violation> violations) {
         Map<String, List<String>> violationsMap = new HashMap<>();
 
         violations.forEach(violation -> {
@@ -97,6 +109,17 @@ public class ApiExceptionHandler implements ProblemHandling, SecurityAdviceTrait
                 .withTitle("Can't be deleted")
                 .withStatus(Status.CONFLICT)
                 .with("message", "Data with this id " + ex.getId() + " is used in other table. Please, firstly delete those data")
+                .build();
+
+        return create(ex, problem, request);
+    }
+
+    @ExceptionHandler(JpaObjectRetrievalFailureException.class)
+    public ResponseEntity<Problem> handleJpaObjectRetrievalFailureException(JpaObjectRetrievalFailureException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+                .withTitle("Can't be deleted")
+                .withStatus(Status.BAD_REQUEST)
+                .withDetail(Objects.requireNonNull(ex.getMessage()).split(";")[0].replace("com.qamet.book_store.entity.", ""))
                 .build();
 
         return create(ex, problem, request);
