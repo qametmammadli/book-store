@@ -10,7 +10,6 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.math.BigDecimal;
@@ -29,8 +28,6 @@ public class BookServiceUnitTest {
 
     BookRepository bookRepository;
 
-    SecurityContext securityContext;
-
     UserService userService;
 
     ModelMapper mapper;
@@ -40,7 +37,6 @@ public class BookServiceUnitTest {
     @BeforeEach
     void setUp() {
         userService = mock(UserService.class);
-        securityContext = mock(SecurityContext.class);
         bookRepository = mock(BookRepository.class);
         mapper = mock(ModelMapper.class);
         this.bookService = new BookService(bookRepository, userService, mapper);
