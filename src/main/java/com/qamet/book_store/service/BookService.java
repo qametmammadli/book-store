@@ -88,6 +88,7 @@ public class BookService implements GenericService<BookDTO> {
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) {
         bookRepository.deleteById(id);
     }
