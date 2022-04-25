@@ -11,8 +11,6 @@ RUN mvn clean package
 
 FROM openjdk:11-jre-slim-buster
 
-EXPOSE 8080
-
 RUN mkdir /app
 
 COPY --from=build /project/target/book_store-0.0.1-SNAPSHOT.jar /app/book-store.jar

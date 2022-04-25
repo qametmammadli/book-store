@@ -38,6 +38,7 @@ public class AuthorService implements GenericService<AuthorDTO> {
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) {
         authorRepository.deleteById(id);
     }

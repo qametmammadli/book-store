@@ -1,0 +1,576 @@
+{
+	"info": {
+		"_postman_id": "2e37e361-a4c3-4927-8505-44c14218375b",
+		"name": "Book Store",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "API",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Auth",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\":\"admin\",\r\n    \"password\":\"admin1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/authentication",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"authentication"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Create User",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"first_name\":\"First name\",\r\n    \"last_name\":\"Last name\",\r\n    \"username\":\"test\",\r\n    \"email\":\"test@test.com\",\r\n    \"password\":\"test12\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete User",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User All",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Publisher Role",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users/2/add_publisher_role",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"2",
+										"add_publisher_role"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Book",
+					"item": [
+						{
+							"name": "Create Book",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"Clean Code\",\r\n    \"description\":\"clean code principles and design patterns\",\r\n    \"author_ids\":[1],\r\n    \"price\":20.99\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/books",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"books"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Books By Publisher",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/books/by_publisher/2",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"books",
+										"by_publisher",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Books Published By me",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/books/published_by_me",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"books",
+										"published_by_me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Books Filter",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/books/filter?size=2&page=0&author_name=Robert Martin&publisher_name=name&price_from=10.99&book_name=code&price_to=55.99&book_description=principle",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"books",
+										"filter"
+									],
+									"query": [
+										{
+											"key": "size",
+											"value": "2"
+										},
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "author_name",
+											"value": "Robert Martin"
+										},
+										{
+											"key": "publisher_name",
+											"value": "name"
+										},
+										{
+											"key": "price_from",
+											"value": "10.99"
+										},
+										{
+											"key": "book_name",
+											"value": "code"
+										},
+										{
+											"key": "price_to",
+											"value": "55.99"
+										},
+										{
+											"key": "book_description",
+											"value": "principle"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Book",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/books/2",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"books",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Book All",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/books",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"books"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Book",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"Clean architecture\",\r\n    \"description\":\"Clean arch\",\r\n    \"author_ids\":[1],\r\n    \"price\":35.01\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/books/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"books",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get One Book",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/books/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"books",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Book Author",
+					"item": [
+						{
+							"name": "Create Book Author",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"Robert Martin\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/authors",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"authors"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Author All",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/authors",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"authors"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Author",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/authors/2",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"authors",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

@@ -3,13 +3,13 @@ version: "3.4"
 services:
 
   database:
-    image: mysql:5.7
+    image: mysql:5.7-debian
     container_name: mysql-db
     restart: always
     volumes:
       - mysql-data:/var/lib/mysql
     ports:
-      - 3307:3306
+      - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=admin
       - MYSQL_DATABASE=book_store_db
@@ -18,7 +18,7 @@ services:
     image: book-store-app:0.0.1
     container_name: book-store-app
     ports:
-      - 8080:8080
+      - 8002:8002
     depends_on:
       - database
 
