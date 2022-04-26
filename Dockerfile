@@ -6,7 +6,7 @@ COPY . /project
 
 WORKDIR /project
 
-RUN mvn clean package
+RUN mvn package
 
 
 FROM openjdk:11-jre-slim-buster
