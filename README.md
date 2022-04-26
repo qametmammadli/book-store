@@ -18,10 +18,10 @@
 
 ## Installation and Running
 ##### After Cloning project, Open your favorite Terminal in root directory and run these commands.
- First step:
+ First step (it might take some time):
 
     docker build -t book-store-app:0.0.1 .
- Second step:
+ Second step (can be need run again, first time mysql could't be installed yet):
 
     docker-compose up
     
@@ -54,6 +54,36 @@
 }
 ```      
 
+### User APIs
+
+| Request | About |
+| ------ | ----------- |
+| `POST /users`  | Create user. |
+| `GET /users` | Get all users. |
+| `PUT /users/{userId}/add_publisher_role`| Add publisher role to user (Only Admin can add) |
+| `DELETE /users/{userId}` | Delete user. |
+
+
+### Book Author APIs
+
+| Request | About |
+| ------ | ----------- |
+| `POST /authors`  | Create book author. |
+| `GET /authors` | Get all book authors. |
+| `DELETE /authors/{authorId}` | Delete author. |
+
+### Book APIs
+
+| Request | About |
+| ------ | ----------- |
+| `POST /books`  | Create book. |
+| `GET /books` | Get all books. |
+| `GET /books/{bookId}` | Get one book by id. |
+| `GET /books/published_by_me` | Get books published by me. |
+| `GET /books/by_publisher/{userId}` | Get books by publisher. |
+| `GET /books/filter?` | Get books by filter (book_name, author_name, price, publisher_name, book_description) |
+| `PUT /books/{bookId}`| Edit book (Only that book created by publisher himself or herself) |
+| `DELETE /books/{bookId}` | Delete book. |
     
 
 
