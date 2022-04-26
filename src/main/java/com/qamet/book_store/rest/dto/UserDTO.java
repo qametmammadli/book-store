@@ -10,6 +10,8 @@ import lombok.Setter;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -42,12 +44,15 @@ public class UserDTO extends AbstractDTO {
     @Size(min = 6, max = 100)
     private String password;
 
+    private Set<RoleDTO> roles;
+
     public UserDTO(User user) {
         this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.username = user.getUsername();
         this.email = user.getEmail();
+        this.roles = user.getRoles().stream().map(RoleDTO::new).collect(Collectors.toSet());
     }
 
 }
