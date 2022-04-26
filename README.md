@@ -26,7 +26,7 @@
     docker-compose up
     
 ## Postman Collections to import [click here](https://github.com/qametmammadli/book-store/blob/master/Book%20Store.postman_collection.json)
-#### By importing `Book Store.postman_collection.json` file to Postman (which located in root directory),  You can quickly test an application 
+#### By importing `Book Store.postman_collection.json` file into Postman (which located in root directory),  You can quickly test an application 
 
 ##### default base url: 
       
