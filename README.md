@@ -44,7 +44,7 @@
 - Publisher and User can search specific book by filter
 
 ### Authentication
-##### To get access_token to send other requests
+##### Get access_token to send other requests
 `POST {{base_url}}/authentication`
 
 ``` 
