@@ -7,19 +7,16 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
 @AllArgsConstructor
 public class AuthorService implements GenericService<AuthorDTO> {
     private final AuthorRepository authorRepository;
     private final ModelMapper mapper;
 
     @Override
-    @Transactional
     public void save(AuthorDTO dto) {
         Author author = new Author();
         author.setName(dto.getName());
@@ -38,7 +35,6 @@ public class AuthorService implements GenericService<AuthorDTO> {
     }
 
     @Override
-    @Transactional
     public void delete(Integer id) {
         authorRepository.deleteById(id);
     }

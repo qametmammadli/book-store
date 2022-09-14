@@ -1,21 +1,12 @@
-FROM maven:3.8.2-jdk-11-slim AS build
+FROM alpine:3.11.2
 
-RUN mkdir /project
-
-COPY . /project
-
-WORKDIR /project
-
-RUN mvn package
-
-
-FROM openjdk:11-jre-slim-buster
+RUN apk add --no-cache openjdk11
 
 RUN mkdir /app
 
-COPY --from=build /project/target/book_store-0.0.1-SNAPSHOT.jar /app/book-store.jar
+COPY /target/book_store-0.0.1-SNAPSHOT.jar /app/book-store.jar
 
 WORKDIR /app
 
-CMD ["java", "-jar", "-Dspring.profiles.active=docker", "book-store.jar"]
+CMD ["java", "-jar", "book-store.jar"]
 
