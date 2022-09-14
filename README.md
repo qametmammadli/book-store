@@ -18,8 +18,9 @@
 
 ## Installation and Running
 ##### After Cloning project, Open your favorite Terminal in root directory and run these commands.
- First steps (it might take some time):
+First steps (it might take some time):
     mvn clean install
+
     docker build -t book-store-app:0.0.1 .
  Second step (can be need run again, first time mysql could't be installed yet):
 
