@@ -35,6 +35,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/books").hasRole(RoleName.PUBLISHER.name())
                 .antMatchers(HttpMethod.GET, "/api/books/published_by_me").hasRole(RoleName.PUBLISHER.name())
                 .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/actuator/**").permitAll()
                 .anyRequest().authenticated();
 
         http

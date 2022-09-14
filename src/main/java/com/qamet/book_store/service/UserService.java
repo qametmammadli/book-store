@@ -11,13 +11,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
 @AllArgsConstructor
 public class UserService implements GenericService<UserDTO> {
 
@@ -27,7 +28,6 @@ public class UserService implements GenericService<UserDTO> {
     private final ModelMapper mapper;
 
     @Override
-    @Transactional
     public void save(UserDTO userDTO) {
         User user = mapper.map(userDTO, User.class);
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
@@ -45,7 +45,6 @@ public class UserService implements GenericService<UserDTO> {
         return userRepository.findById(id).map(UserDTO::new).orElseThrow();
     }
 
-    @Transactional
     public void addPublisherRole(Integer id) {
         User user = userRepository.findById(id).orElseThrow();
         user.getRoles().add(roleRepository.findByName(RoleName.PUBLISHER));
@@ -57,7 +56,6 @@ public class UserService implements GenericService<UserDTO> {
     }
 
     @Override
-    @Transactional
     public void delete(Integer id) {
         userRepository.findById(id).ifPresentOrElse(user -> {
             if (user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()).contains(RoleName.ADMIN))

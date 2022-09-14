@@ -5,6 +5,7 @@ services:
   database:
     image: mysql:5.7-debian
     container_name: mysql-db
+    hostname: database
     restart: unless-stopped
     volumes:
       - mysql-data:/var/lib/mysql
@@ -17,6 +18,8 @@ services:
   book-store-app:
     image: book-store-app:0.0.1
     container_name: book-store-app
+    environment:
+      DATABASE_HOSTNAME: database
     restart: on-failure
     ports:
       - 8002:8002

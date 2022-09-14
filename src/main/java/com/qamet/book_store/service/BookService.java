@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@Transactional(readOnly = true)
 @AllArgsConstructor
 public class BookService implements GenericService<BookDTO> {
 
@@ -31,7 +30,6 @@ public class BookService implements GenericService<BookDTO> {
     private final ModelMapper mapper;
 
     @Override
-    @Transactional
     public void save(BookDTO dto) {
         Book book = new Book();
         mapToEntity(dto, book);
@@ -63,7 +61,6 @@ public class BookService implements GenericService<BookDTO> {
         }.getType());
     }
 
-    @Transactional
     public void update(Integer id, BookDTO dto) {
         Book book = bookRepository.findById(id).orElseThrow();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
