@@ -21,9 +21,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @IntegrationTest
-public class AuthControllerIntegrationTest {
+class AuthControllerIntegrationTest {
 
-    private static final String API_URL = "/api/authentication";
+    private static final String API_URL = "/authentication";
 
     @Autowired
     private MockMvc mockMvc;

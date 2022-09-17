@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/authors")
+@RequestMapping("/authors")
 public class AuthorController extends GenericController<AuthorDTO> {
     public AuthorController(AuthorService authorService) {
         super(authorService);

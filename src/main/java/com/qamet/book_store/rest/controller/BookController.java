@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.math.BigDecimal;
 
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping("/books")
 public class BookController extends GenericController<BookDTO> {
 
     private final BookService bookService;
