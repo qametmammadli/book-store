@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: book-store-app
+  namespace: book-store-dev
   labels:
     app: book-store-app
 spec:
