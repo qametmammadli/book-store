@@ -9,11 +9,12 @@
 - Java 11
 - Spring BOOT (Web, Security, Data JPA)
 - JPA Specification
-- Docker
 - MySQL 5.7
 - Liquibase
 - JUnit & Mockito
 - ModelMapper
+- Docker
+- Kubernetes
 
 
 ## Installation and Running
