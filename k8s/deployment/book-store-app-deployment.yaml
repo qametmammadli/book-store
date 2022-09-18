@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book-store-app
+  namespace: book-store-dev
+  labels:
+    app: book-store-app
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: book-store-app
+      labels:
+        app: book-store-app
+    spec:
+      containers:
+        - name: book-store-app
+          image: qametmammadli/book-store-app:1.0.1
+          ports:
+            - containerPort: 8002
+          env:
+            - name: DATABASE_HOSTNAME
+              value: mysql-db-service
+          imagePullPolicy: IfNotPresent
+  selector:
+    matchLabels:
+      app: book-store-app

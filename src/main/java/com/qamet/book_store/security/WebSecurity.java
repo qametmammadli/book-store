@@ -30,10 +30,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/api/authentication").permitAll()
-                .antMatchers(HttpMethod.PUT, "/api/users/{id}/add_publisher_role").hasRole(RoleName.ADMIN.name())
-                .antMatchers(HttpMethod.POST, "/api/books").hasRole(RoleName.PUBLISHER.name())
-                .antMatchers(HttpMethod.GET, "/api/books/published_by_me").hasRole(RoleName.PUBLISHER.name())
+                .antMatchers(HttpMethod.POST, "/authentication").permitAll()
+                .antMatchers(HttpMethod.PUT, "/users/{id}/add_publisher_role").hasRole(RoleName.ADMIN.name())
+                .antMatchers(HttpMethod.POST, "/books").hasRole(RoleName.PUBLISHER.name())
+                .antMatchers(HttpMethod.GET, "/books/published_by_me").hasRole(RoleName.PUBLISHER.name())
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/actuator/**").permitAll()
                 .anyRequest().authenticated();

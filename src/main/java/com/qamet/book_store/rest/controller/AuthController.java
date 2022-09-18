@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/authentication")
+@RequestMapping("/authentication")
 @AllArgsConstructor
 public class AuthController {
 

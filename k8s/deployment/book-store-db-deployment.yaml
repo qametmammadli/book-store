@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book-store-db
+  namespace: book-store-dev
+  labels:
+    app: book-store-db
+spec:
+  template:
+    metadata:
+      name: book-store-db
+      labels:
+        app: book-store-db
+    spec:
+      containers:
+        - name: book-store-db
+          image: mysql:5.7-debian
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: admin
+            - name: MYSQL_DATABASE
+              value: book_store_db
+          imagePullPolicy: IfNotPresent
+  selector:
+    matchLabels:
+      app: book-store-db
