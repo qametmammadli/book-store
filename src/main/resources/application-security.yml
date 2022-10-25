@@ -1,0 +1,4 @@
+security:
+  jwt:
+    base64-secret-key: VWNmMnFzNGh1S2JxMVdvajc2dzhMSUJGbVlyY0paVWtQT1N1aWxxWHRqYmtwaHhJbEZpSkIxcHRqaHZhVUQ3STE1bVhXR1JLTWxQYnR4enlEb0pST3FFcUFWZWVvOWw1c0l6NWRUanRNemlobllxRXZFZ3NteWJUNkxmeDFFNXJRY0hrc21fTmc5UkZ2QzhqekdOeEZXOXR6NVNjQTlHcVlGamRHNFBsV3Jz
+    validity-in-seconds: 86400
