@@ -1,11 +1,23 @@
 package com.qamet.book_store.service;
 
+import com.qamet.book_store.config.producer.KafkaProducer;
 import com.qamet.book_store.entity.Book;
 import com.qamet.book_store.repository.BookRepository;
 import com.qamet.book_store.rest.dto.BookDTO;
 import com.qamet.book_store.rest.dto.UserDTO;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.security.access.AccessDeniedException;
@@ -13,14 +25,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-public class BookServiceUnitTest {
+class BookServiceUnitTest {
 
     BookDTO bookDTO;
 
@@ -34,12 +45,14 @@ public class BookServiceUnitTest {
 
     BookService bookService;
 
+    KafkaProducer kafkaProducer;
+
     @BeforeEach
     void setUp() {
         userService = mock(UserService.class);
         bookRepository = mock(BookRepository.class);
         mapper = mock(ModelMapper.class);
-        this.bookService = new BookService(bookRepository, userService, mapper);
+        this.bookService = new BookService(bookRepository, userService, mapper, kafkaProducer);
 
         bookDTO = new BookDTO();
         bookDTO.setName("test book");

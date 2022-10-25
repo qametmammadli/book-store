@@ -1,14 +1,17 @@
 package com.qamet.book_store.service;
 
+import com.qamet.book_store.config.producer.KafkaProducer;
 import com.qamet.book_store.entity.Author;
 import com.qamet.book_store.entity.Book;
 import com.qamet.book_store.repository.BookRepository;
 import com.qamet.book_store.rest.dto.BookDTO;
 import com.qamet.book_store.rest.dto.BookSpecDTO;
 import com.qamet.book_store.rest.dto.UserDTO;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
@@ -22,12 +25,17 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Slf4j
 public class BookService implements GenericService<BookDTO> {
 
     private final BookRepository bookRepository;
     private final UserService userService;
     private final ModelMapper mapper;
+    private final KafkaProducer kafkaProducer;
+
+    @Value("${topics.book.events}")
+    private String bookEventsTopic;
 
     @Override
     public void save(BookDTO dto) {
@@ -36,6 +44,8 @@ public class BookService implements GenericService<BookDTO> {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         book.setPublisherId(userService.findByUsername(authentication.getName()).getId());
         bookRepository.save(book);
+        dto.setId(book.getId());
+        kafkaProducer.send(bookEventsTopic, dto);
     }
 
     @Override

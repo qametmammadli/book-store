@@ -1,17 +1,28 @@
 package com.qamet.book_store.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
 
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BookDTO extends AbstractDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ToString
+public class BookDTO extends AbstractDTO implements Serializable {
+
+    private static final long serialVersionUID = -4209524908575754744L;
     private Integer id;
 
     @NotEmpty
