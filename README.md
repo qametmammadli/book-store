@@ -13,6 +13,7 @@
 - Liquibase
 - JUnit & Mockito
 - ModelMapper
+- Apache Kafka
 - Docker
 - Kubernetes
 
