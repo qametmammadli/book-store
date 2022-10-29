@@ -1,14 +1,10 @@
 spring:
   kafka:
     consumer:
-      bootstrap-servers: localhost:29092
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      bootstrap-servers: localhost:9092
       group-id: book-events-group
     producer:
-      bootstrap-servers: localhost:29092
-      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      bootstrap-servers: localhost:9092
       properties:
         acks: 1
         retries: 3
@@ -17,7 +13,7 @@ spring:
         delivery.timeout.ms: 30000
     admin:
       properties:
-        bootstrap.servers: localhost:29092
+        bootstrap.servers: localhost:9092
 
 topics:
   book:
