@@ -1,7 +1,5 @@
 package com.qamet.book_store.runner;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qamet.book_store.entity.Role;
 import com.qamet.book_store.entity.User;
 import com.qamet.book_store.entity.enumeration.RoleName;
@@ -26,22 +24,20 @@ public class DataSeeder implements ApplicationRunner {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final KafkaTemplate<Long, Object> kafkaTemplate;
-    private final ObjectMapper mapper;
+    private final KafkaTemplate<String, BookDTO> kafkaTemplate;
 
     @Value("${topics.book.events}")
     private String bookEventsTopic;
 
     @Override
-    public void run(ApplicationArguments args) throws JsonProcessingException {
+    public void run(ApplicationArguments args) {
 
         BookDTO testBook = BookDTO.builder()
                 .id(1)
                 .name("test book")
                 .build();
 
-        String data = mapper.writeValueAsString(testBook);
-        kafkaTemplate.send(bookEventsTopic, data);
+        kafkaTemplate.send(bookEventsTopic, testBook);
 
         if (roleRepository.count() < 1) {
             Role userRole = new Role(null, RoleName.USER);

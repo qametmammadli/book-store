@@ -38,8 +38,4 @@ public class BookDTO extends AbstractDTO implements Serializable {
     @Digits(integer = 5, fraction = 2)
     private BigDecimal price = BigDecimal.ZERO;
 
-    private UserDTO publisher;
-
-    private Set<AuthorDTO> authors;
-
 }

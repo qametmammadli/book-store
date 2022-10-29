@@ -1,8 +1,9 @@
 package com.qamet.book_store.config.producer;
 
+import com.qamet.book_store.rest.dto.BookDTO;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.IntegerSerializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,10 +57,10 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<Long, Object> bookProducerFactory() {
+    public ProducerFactory<String, BookDTO> bookProducerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class);
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         configProps.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, deliveryTimeout);
         configProps.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, retry);
@@ -68,7 +69,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<Long, Object> userKafkaTemplate() {
+    public KafkaTemplate<String, BookDTO> bookKafkaTemplate() {
         return new KafkaTemplate<>(bookProducerFactory());
     }
 
