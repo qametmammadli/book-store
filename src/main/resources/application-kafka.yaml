@@ -18,3 +18,4 @@ spring:
 topics:
   book:
     events: book-events-topic
+    dead-letter: book-events-DLT-topic

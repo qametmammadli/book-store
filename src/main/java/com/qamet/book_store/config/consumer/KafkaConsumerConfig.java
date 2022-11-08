@@ -1,8 +1,10 @@
 package com.qamet.book_store.config.consumer;
 
 import com.qamet.book_store.rest.dto.BookDTO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.NetworkException;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +13,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.ExponentialBackOffWithMaxRetries;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
@@ -20,6 +24,7 @@ import java.util.Map;
 
 @Configuration
 @Slf4j
+@RequiredArgsConstructor
 public class KafkaConsumerConfig {
 
     @Value("${spring.kafka.consumer.bootstrap-servers}")
@@ -27,6 +32,11 @@ public class KafkaConsumerConfig {
 
     @Value("${spring.kafka.consumer.group-id}")
     private String groupId;
+
+    @Value("${topics.book.dead-letter}")
+    private String deadLetter;
+
+    private final KafkaTemplate<String, BookDTO> kafkaTemplate;
 
     public ConsumerFactory<String, BookDTO> consumerFactory() {
 
@@ -53,12 +63,11 @@ public class KafkaConsumerConfig {
     }
 
     public DefaultErrorHandler errorHandler() {
-
-        ExponentialBackOffWithMaxRetries exponentialBackOff = new ExponentialBackOffWithMaxRetries(3);
-        exponentialBackOff.setInitialInterval(50_000);
+        ExponentialBackOffWithMaxRetries exponentialBackOff = new ExponentialBackOffWithMaxRetries(2); // total retries: 1 + 2
+        exponentialBackOff.setInitialInterval(10_000);
         exponentialBackOff.setMultiplier(3);
 
-        DefaultErrorHandler errorHandler = new DefaultErrorHandler(exponentialBackOff);
+        DefaultErrorHandler errorHandler = new DefaultErrorHandler(dltPublishingRecoverer(), exponentialBackOff);
 
         setNonRetryableExceptions(errorHandler);
         setRetryableExceptions(errorHandler);
@@ -98,5 +107,18 @@ public class KafkaConsumerConfig {
         errorHandler.addNotRetryableExceptions(
                 NullPointerException.class
         );
+    }
+
+
+    public DeadLetterPublishingRecoverer dltPublishingRecoverer() {
+        return new DeadLetterPublishingRecoverer(kafkaTemplate,
+                (failedRecord, e) -> {
+                    if (e.getCause() instanceof NetworkException) {
+                        log.info("Network failure occurred in consuming message : {}", failedRecord.toString());
+                        return new TopicPartition(failedRecord.topic(), failedRecord.partition());
+                    }
+                    log.info("Other failure occurred in consuming, move to dead letter topic, message : {}, exception : {}", failedRecord, e);
+                    return new TopicPartition(deadLetter, failedRecord.partition());
+                });
     }
 }

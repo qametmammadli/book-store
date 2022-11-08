@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 public class KafkaConsumer {
 
     @KafkaListener(id = "1",
-            topics = "book-events-topic",
-            groupId = "book-events-group",
+            topics = "${topics.book.events}",
+            groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "myKafkaListenerContainerFactory")
     public void consumeBookEvents(ConsumerRecord<String, BookDTO> messageRecord) {
         log.info("book consumed : {}", messageRecord);
