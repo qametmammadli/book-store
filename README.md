@@ -15,7 +15,7 @@
 - ModelMapper
 - Apache Kafka
 - Docker
-- Kubernetes
+- Kubernetes, Helm
 
 
 ## Installation and Running
@@ -36,7 +36,7 @@
 
 ##### default base url: 
       
-      localhost:8002/api
+      localhost:8002/api/book_store
      
 ## REST API
 ##### When Application running, firstly by default Admin user will be created AS ADMIN Role
