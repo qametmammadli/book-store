@@ -1,0 +1,35 @@
+{{- $bookStoreDB := .Values.deployment.bookStoreDB -}}
+{{- $bookStoreDBName := $bookStoreDB.name -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $bookStoreDBName }}
+  labels:
+    app: {{ $bookStoreDBName }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ $bookStoreDBName }}
+  template:
+    metadata:
+      name: {{ $bookStoreDBName }}
+      labels:
+        app: {{ $bookStoreDBName }}
+    spec:
+      containers:
+        - name: {{ $bookStoreDBName }}
+          image: "{{ $bookStoreDB.image.name }}:{{ $bookStoreDB.image.tag }}"
+          ports:
+            - containerPort: {{ $bookStoreDB.port }}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configMap }}
+                  key: BOOK_STORE_DATABASE_NAME
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configMap }}
+                  key: BOOK_STORE_DATABASE_PASSWORD

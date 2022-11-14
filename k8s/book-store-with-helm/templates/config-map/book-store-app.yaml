@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configMap }}
+data:
+  BOOK_STORE_DATABASE_NAME: {{ .Values.deployment.bookStoreDB.env.DATABASE_NAME }}
+  BOOK_STORE_DATABASE_PASSWORD: {{ .Values.deployment.bookStoreDB.env.DATABASE_PASSWORD }}
+  BOOK_STORE_DATABASE_HOSTNAME: {{ .Values.deployment.bookStoreApp.env.DATABASE_HOSTNAME }}

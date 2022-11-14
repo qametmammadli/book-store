@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.deployment.bookStoreApp.name }}-ingress
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: /api/book_store
+            backend:
+              service:
+                name: {{ .Values.deployment.bookStoreApp.name }}-service
+                port:
+                  number: 8002
