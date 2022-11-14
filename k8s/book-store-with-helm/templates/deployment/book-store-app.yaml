@@ -1,0 +1,31 @@
+{{- $bookStoreApp := .Values.deployment.bookStoreApp -}}
+{{- $bookStoreAppName := $bookStoreApp.name -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $bookStoreApp.name }}
+  labels:
+    app: {{ $bookStoreAppName }}
+spec:
+  replicas: {{ $bookStoreApp.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ $bookStoreAppName }}
+  template:
+    metadata:
+      name: {{ $bookStoreAppName }}
+      labels:
+        app: {{ $bookStoreAppName }}
+    spec:
+      containers:
+        - name: {{ $bookStoreAppName }}
+          image: "{{ $bookStoreApp.image.name }}:{{ $bookStoreApp.image.tag }}"
+          ports:
+            - containerPort: {{ $bookStoreApp.port }}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DATABASE_HOSTNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configMap }}
+                  key: BOOK_STORE_DATABASE_HOSTNAME

@@ -1,0 +1,22 @@
+deployment:
+  bookStoreApp:
+    name: book-store-app
+    replicaCount: 2
+    port: 8002
+    image:
+      name: qametmammadli/book-store-app
+      tag: 1.0.1
+    env:
+      DATABASE_HOSTNAME: book-store-db-service
+  bookStoreDB:
+    name: book-store-db
+    replicaCount: 1
+    port: 3306
+    image:
+      name: mysql
+      tag: 5.7-debian
+    env:
+      DATABASE_NAME: book_store_db
+      DATABASE_PASSWORD: admin
+
+configMap: book-store-config-map

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.deployment.bookStoreDB.name }}-service
+  labels:
+    app: {{ .Values.deployment.bookStoreDB.name }}-service
+spec:
+  selector:
+    app: {{ .Values.deployment.bookStoreDB.name }}
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.deployment.bookStoreDB.port }}
