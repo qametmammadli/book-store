@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Fetch Code') {
             steps {
-                git branch: 'master', url: 'https://github.com/qametmammadli/book-store.git' 
+                git branch: 'development', url: 'https://github.com/qametmammadli/book-store.git' 
             }
         }
 
