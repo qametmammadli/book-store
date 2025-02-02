@@ -1,13 +1,15 @@
-def COLOR_MAP = [
-    'SUCCESS': 'good', 
-    'FAILURE': 'danger',
-]
-
 pipeline {
     agent any
     environment {
         NEXUS_URL = '172.31.30.142:8081'
         NEXUS_REPO = 'book_store_repo'
+        AWS_REGION = "us-east-1"
+        aws_creds = 'aws_creds_book_store'
+        registryCredential = 'ecr:us-east-1:aws_creds_book_store'
+        imageName = "058006845506.dkr.ecr.us-east-1.amazonaws.com/book_store_image"
+        bookStoreRegistry = "https://058006845506.dkr.ecr.us-east-1.amazonaws.com"
+        cluster = "book_store"
+        service = "book_store_svc"
     }
     tools {
         maven "MAVEN3.8"
@@ -15,13 +17,13 @@ pipeline {
     }
 
     stages {
-        stage('Fetch Code') {
+        stage('FetchCode') {
             steps {
                 git branch: 'development', url: 'https://github.com/qametmammadli/book-store.git' 
             }
         }
 
-        stage('Unit Test') {
+        stage('UnitTest') {
             steps {
                 sh 'mvn test'
             }
@@ -47,7 +49,7 @@ pipeline {
         }
 
 
-        stage('SonarQube analysis') {
+        stage('SonarQubeAnalysis') {
             environment {
                 scannerHome = tool 'sonar6.2'
             }
@@ -66,7 +68,7 @@ pipeline {
             }
         }
 
-        stage("Quality Gate") {
+        stage("QualityGate") {
             steps {
                 timeout(time: 10, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
@@ -93,6 +95,46 @@ pipeline {
                 )
             }
         }
+
+        stage('BuildImage') {
+            steps {
+                script {
+                    dockerImage = docker.build("${imageName}:${BUILD_NUMBER}", "--no-cache --file Dockerfile .")
+                }
+            }
+        }
+
+        stage('UploadToAWS') {
+          steps {
+            script {
+              docker.withRegistry(bookStoreRegistry, registryCredential) {
+                dockerImage.push("$BUILD_NUMBER")
+                dockerImage.push('latest')
+              }
+            }
+          }
+        }
+
+        stage('RemoveContainerImages') {
+            steps {
+                script {
+                    sh "docker rmi -f ${imageName}:${BUILD_NUMBER} || true"
+                    sh "docker rmi -f ${imageName}:latest || true"
+                }
+            }
+        }
+
+        stage('DeployToECS') {
+            steps {
+                withAWS(credentials: "${aws_creds}", region: "${AWS_REGION}") {
+                    sh """
+                    aws ecs update-service --cluster "$cluster" --service "$service" --force-new-deployment"
+                    """
+                }
+            }
+        }
+
+
 
     }
 
