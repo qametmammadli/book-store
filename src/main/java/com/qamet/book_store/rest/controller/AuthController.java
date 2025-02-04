@@ -21,6 +21,7 @@ public class AuthController {
 
     @PostMapping
     public ResponseEntity<JWTResponseDTO> authenticate(@Valid @RequestBody AuthenticationDTO dto) {
+        // authenticate
         authenticationManagerBuilder.getObject().authenticate(
                 new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword())
         );
