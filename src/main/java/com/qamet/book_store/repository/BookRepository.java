@@ -36,15 +36,15 @@ public interface BookRepository extends JpaRepository<Book, Integer>, JpaSpecifi
         return findAll((root, query, criteriaBuilder) -> {
                     List<Predicate> predicates = new ArrayList<>();
 
-                    if (bookSpecDTO.getBookName().length() > 0) {
+                    if (!bookSpecDTO.getBookName().isEmpty()) {
                         predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get(Book_.NAME)), "%" + bookSpecDTO.getBookName().toLowerCase() + "%"));
                     }
 
-                    if (bookSpecDTO.getBookDescription().length() > 0) {
+                    if (!bookSpecDTO.getBookDescription().isEmpty()) {
                         predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get(Book_.DESCRIPTION)), "%" + bookSpecDTO.getBookDescription().toLowerCase() + "%"));
                     }
 
-                    if (bookSpecDTO.getPublisherName().length() > 0) {
+                    if (!bookSpecDTO.getPublisherName().isEmpty()) {
                         Expression<String> publisherNameConcatExpression = criteriaBuilder.concat(
                                 criteriaBuilder.concat(root.get(Book_.PUBLISHER).get(User_.FIRST_NAME),
                                         " "),
@@ -57,7 +57,7 @@ public interface BookRepository extends JpaRepository<Book, Integer>, JpaSpecifi
                         predicates.add(publisherNamePredicate);
                     }
 
-                    if (bookSpecDTO.getAuthorName().length() > 0) {
+                    if (!bookSpecDTO.getAuthorName().isEmpty()) {
                         predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.join(Book_.AUTHORS).get(Author_.NAME)), "%" + bookSpecDTO.getAuthorName().toLowerCase() + "%"));
                     }
 
